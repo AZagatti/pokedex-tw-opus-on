@@ -31,6 +31,11 @@
 	);
 
 	let showShiny = $state(false);
+	// Reset the shiny toggle when navigating between Pokémon (same component instance).
+	$effect(() => {
+		void p.id;
+		showShiny = false;
+	});
 	const heroSrc = $derived(
 		showShiny
 			? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${p.id}.png`
@@ -38,7 +43,10 @@
 	);
 
 	function playCry() {
-		const url = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${p.id}.ogg`;
+		const url =
+			p.cries?.latest ??
+			p.cries?.legacy ??
+			`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${p.id}.ogg`;
 		const audio = new Audio(url);
 		audio.volume = 0.4;
 		void audio.play().catch(() => {});

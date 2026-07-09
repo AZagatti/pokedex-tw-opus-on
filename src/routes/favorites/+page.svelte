@@ -36,18 +36,21 @@
 			<h2 class="mt-8 mb-3 text-xl font-bold">Pokémon</h2>
 			<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
 				{#each pokemon as fav (fav.id)}
-					<a href="{base}/pokemon/{fav.name}/" class="surface group animate-pop-in relative flex flex-col items-center rounded-2xl border p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
+					<div class="relative">
 						<button
-							onclick={(e) => { e.preventDefault(); favorites.toggle({ kind: "pokemon", id: fav.id, name: fav.name }); }}
-							class="absolute right-2 top-2 z-10 text-poke-red transition hover:scale-110"
+							type="button"
+							onclick={() => favorites.toggle({ kind: "pokemon", id: fav.id, name: fav.name })}
+							class="text-link absolute right-2 top-2 z-10 transition hover:scale-110"
 							aria-label="Remove {fav.name} from favorites"
 						>
 							<Icon name="heart" filled size={18} />
 						</button>
-						<span class="text-muted self-start text-xs font-bold tabular-nums">{formatDexNumber(fav.id)}</span>
-						<PokemonImage src={artworkUrl(fav.id)} fallback={spriteUrl(fav.id)} alt={titleCase(fav.name)} class="h-24 w-24 transition-transform group-hover:scale-110" />
-						<p class="mt-2 text-center font-bold">{titleCase(fav.name)}</p>
-					</a>
+						<a href="{base}/pokemon/{fav.name}/" class="surface group animate-pop-in flex flex-col items-center rounded-2xl border p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
+							<span class="text-muted self-start text-xs font-bold tabular-nums">{formatDexNumber(fav.id)}</span>
+							<PokemonImage src={artworkUrl(fav.id)} fallback={spriteUrl(fav.id)} alt={titleCase(fav.name)} class="h-24 w-24 transition-transform group-hover:scale-110" />
+							<p class="mt-2 text-center font-bold">{titleCase(fav.name)}</p>
+						</a>
+					</div>
 				{/each}
 			</div>
 		{/if}
@@ -55,17 +58,20 @@
 			<h2 class="mt-8 mb-3 text-xl font-bold">Berries</h2>
 			<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
 				{#each berries as fav (fav.id)}
-					<a href="{base}/berries/{fav.name}/" class="surface group animate-pop-in relative flex flex-col items-center rounded-2xl border p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
+					<div class="relative">
 						<button
-							onclick={(e) => { e.preventDefault(); favorites.toggle({ kind: "berry", id: fav.id, name: fav.name }); }}
-							class="absolute right-2 top-2 z-10 text-poke-red transition hover:scale-110"
+							type="button"
+							onclick={() => favorites.toggle({ kind: "berry", id: fav.id, name: fav.name })}
+							class="text-link absolute right-2 top-2 z-10 transition hover:scale-110"
 							aria-label="Remove {fav.name} from favorites"
 						>
 							<Icon name="heart" filled size={18} />
 						</button>
-						<img src={berrySprite(fav.name)} alt={titleCase(fav.name)} class="h-16 w-16 object-contain [image-rendering:pixelated]" loading="lazy" />
-						<p class="mt-2 text-center font-bold capitalize">{titleCase(fav.name)} Berry</p>
-					</a>
+						<a href="{base}/berries/{fav.name}/" class="surface group animate-pop-in flex flex-col items-center rounded-2xl border p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
+							<img src={berrySprite(fav.name)} alt={titleCase(fav.name)} class="h-16 w-16 object-contain [image-rendering:pixelated]" loading="lazy" />
+							<p class="mt-2 text-center font-bold capitalize">{titleCase(fav.name)} Berry</p>
+						</a>
+					</div>
 				{/each}
 			</div>
 		{/if}

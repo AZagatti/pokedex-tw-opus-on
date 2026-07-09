@@ -30,3 +30,4 @@
 - **heading-order:** cards used <h3> after <h1> (skipped h2). Changed card titles to <p>.
 - **Best-Practices 96 (not 100):** only failure is transient 429 rate-limiting from raw.githubusercontent.com when loading ~48 artwork PNGs. External/intermittent (scores 96↔100); ≥90 DoD met. Images fall back gracefully. Not worth chasing.
 - **stale vite cache:** new `.text-link` utility was missing from built CSS until `rm -rf .svelte-kit build node_modules/.vite` clean rebuild.
+- **Subagent reviews (2 rounds):** fixed theme-init-on-load, button-in-anchor (cards + favorites), species-for-forms + typed ApiError 404 handling, image-fallback a11y, debounce cleanup, showShiny reset on nav, API cries.latest, StatBar aria-hidden, berries aria-live + error copy, and rewrote EvolutionChain to render branched trees (Eevee) as base-once fan-out.

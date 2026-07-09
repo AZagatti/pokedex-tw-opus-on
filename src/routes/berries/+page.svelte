@@ -38,7 +38,9 @@
 <section class="animate-fade-in">
 	<div class="mb-6">
 		<h1 class="text-3xl font-extrabold sm:text-4xl">Berries</h1>
-		<p class="text-muted mt-1">Browse all {berries.length || 64} berries.</p>
+		<p class="text-muted mt-1">
+			{errored ? "Berry data is unavailable right now." : `Browse all ${berries.length || 64} berries.`}
+		</p>
 	</div>
 
 	<input
@@ -56,9 +58,13 @@
 			{/each}
 		</div>
 	{:else if errored}
-		<p class="text-muted py-12 text-center">Could not load berries. Please try again later.</p>
+		<p class="text-muted py-12 text-center" role="alert">
+			Could not load berries. Please try again later.
+		</p>
 	{:else if filtered.length === 0}
-		<p class="text-muted py-12 text-center">No berries match “{search}”.</p>
+		<p class="text-muted py-12 text-center" aria-live="polite">
+			No berries match “{search}”.
+		</p>
 	{:else}
 		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
 			{#each filtered as berry (berry.id)}

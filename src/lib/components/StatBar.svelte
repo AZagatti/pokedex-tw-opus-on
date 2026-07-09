@@ -17,7 +17,10 @@
 	<span class="w-8 shrink-0 text-right text-sm font-bold tabular-nums">
 		{value}
 	</span>
-	<div class="h-2.5 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+	<div
+		class="h-2.5 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"
+		aria-hidden="true"
+	>
 		<div
 			class="stat-bar-fill h-full rounded-full"
 			style="width: {pct}%; background-color: {typeColor(accent)}"
