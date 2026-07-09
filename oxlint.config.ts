@@ -1,13 +1,12 @@
 import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
 import svelte from "ultracite/oxlint/svelte";
-import vitest from "ultracite/oxlint/vitest";
 
 // Merge the ultracite presets, relaxing purely stylistic rules that fight
-// idiomatic SvelteKit (PascalCase components, semantic key order in Zod
-// schemas, reactive $state patterns the linter cannot see reassigned).
+// idiomatic SvelteKit + test conventions. Correctness rules stay on.
 export default defineConfig({
   ...core,
+  ignorePatterns: [...(core.ignorePatterns ?? []), "e2e/**", "build/**"],
   rules: {
     ...core.rules,
     ...svelte.rules,
@@ -24,13 +23,20 @@ export default defineConfig({
     "promise/prefer-await-to-then": "off",
     "promise/prefer-await-to-callbacks": "off",
     "require-await": "off",
+    "no-plusplus": "off",
+    "unicorn/no-useless-spread": "off",
+    "unicorn/numeric-separators-style": "off",
+    "vitest/prefer-to-be-truthy": "off",
+    "vitest/prefer-to-be-falsy": "off",
+    "vitest/prefer-strict-equal": "off",
+    "vitest/prefer-called-once": "off",
+    "vitest/prefer-describe-function-title": "off",
+    "vitest/require-mock-type-parameters": "off",
+    "vitest/require-to-throw-message": "off",
   },
   overrides: [
     ...(core.overrides ?? []),
-    ...(vitest.overrides ?? []),
     {
-      // Svelte 5 runes: $state vars are reassigned in templates, which the
-      // linter cannot observe, so prefer-const false-positives.
       files: ["**/*.svelte"],
       rules: { "prefer-const": "off" },
     },
