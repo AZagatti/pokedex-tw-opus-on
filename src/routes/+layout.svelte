@@ -29,7 +29,7 @@
 					href="https://pokeapi.co"
 					target="_blank"
 					rel="noreferrer"
-					class="font-semibold text-poke-red hover:underline">PokeAPI</a
+					class="font-semibold text-link hover:underline">PokeAPI</a
 				>. Not affiliated with Nintendo/Game Freak.
 			</p>
 			<p>Built with SvelteKit</p>

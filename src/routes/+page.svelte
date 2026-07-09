@@ -253,7 +253,7 @@ import type { IndexEntry } from '$api/index-builder';
 		<button
 			type="button"
 			onclick={clearFilters}
-			class="inline-flex items-center gap-1 text-sm font-medium text-poke-red hover:underline"
+			class="inline-flex items-center gap-1 text-sm font-medium text-link hover:underline"
 		>
 			<Icon name="x" class="size-3.5" /> Clear filters
 		</button>

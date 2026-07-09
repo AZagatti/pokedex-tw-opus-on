@@ -39,6 +39,7 @@
     --text: #0f172a;
     --muted: #64748b;
     --border: #e2e8f0;
+    --link: #c20d0d;
   }
 
   .dark {
@@ -47,6 +48,7 @@
     --text: #f1f5f9;
     --muted: #94a3b8;
     --border: #1e293b;
+    --link: #f87171;
   }
 
   body {
@@ -68,6 +70,10 @@
   .surface {
     background-color: var(--surface);
     border-color: var(--border);
+  }
+
+  .text-link {
+    color: var(--link);
   }
 
   .text-muted {

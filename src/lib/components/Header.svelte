@@ -36,10 +36,10 @@
 			{#each links as link (link.href)}
 				<a
 					href={link.href}
-					class="relative rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:text-poke-red {isActive(
+					class="relative rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:text-link {isActive(
 						link
 					)
-						? 'text-poke-red'
+						? 'text-link'
 						: 'text-muted'}"
 					aria-current={isActive(link) ? "page" : undefined}
 				>
@@ -94,7 +94,7 @@
 					class="flex items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold {isActive(
 						link
 					)
-						? 'text-poke-red'
+						? 'text-link'
 						: 'text-muted'}"
 				>
 					{link.label}
