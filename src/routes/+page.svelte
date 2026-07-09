@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { buildIndex } from '$api/index-builder';
+	import { buildIndex } from "$api/index-builder";
+import { getPokemon } from "$api/client";
 import type { IndexEntry } from '$api/index-builder';
 	import PokemonCard from "$components/PokemonCard.svelte";
 	import Skeleton from "$components/Skeleton.svelte";
@@ -8,7 +9,7 @@ import type { IndexEntry } from '$api/index-builder';
 	import { ALL_GENERATIONS, ALL_TYPES } from "$utils/format";
 	import Icon from "$components/Icon.svelte";
 
-	type SortKey = "id-asc" | "id-desc" | "name-asc" | "name-desc";
+	type SortKey = "id-asc" | "id-desc" | "name-asc" | "name-desc" | "stat-desc";
 
 	const PAGE_SIZE = 48;
 
@@ -23,6 +24,8 @@ import type { IndexEntry } from '$api/index-builder';
 	let sort = $state<SortKey>("id-asc");
 	let showFilters = $state(false);
 	let visibleCount = $state(PAGE_SIZE);
+	let statTotals = $state<Record<number, number>>({});
+	let loadingStats = $state(false);
 
 	let debounceTimer: ReturnType<typeof setTimeout>;
 	$effect(() => {
@@ -30,7 +33,7 @@ import type { IndexEntry } from '$api/index-builder';
 		clearTimeout(debounceTimer);
 		debounceTimer = setTimeout(() => {
 			debouncedSearch = value.trim().toLowerCase();
-		}, 200);
+		}, 250);
 		return () => clearTimeout(debounceTimer);
 	});
 
@@ -81,6 +84,12 @@ import type { IndexEntry } from '$api/index-builder';
 				sorted.sort((a, b) => b.name.localeCompare(a.name));
 				break;
 			}
+			case "stat-desc": {
+				sorted.sort(
+					(a, b) => (statTotals[b.id] ?? -1) - (statTotals[a.id] ?? -1)
+				);
+				break;
+			}
 			default: {
 				break;
 			}
@@ -89,6 +98,41 @@ import type { IndexEntry } from '$api/index-builder';
 	});
 
 	const visible = $derived(filtered.slice(0, visibleCount));
+
+	// Lazily fetch base-stat totals when the user sorts by stat total.
+	$effect(() => {
+		if (sort !== "stat-desc") {
+			return;
+		}
+		const missing = filtered.filter((p) => statTotals[p.id] === undefined);
+		if (missing.length === 0) {
+			return;
+		}
+		let cancelled = false;
+		loadingStats = true;
+		void Promise.all(
+			missing.slice(0, 60).map(async (p) => {
+				try {
+					const full = await getPokemon(p.id);
+					const total = full.stats.reduce((sum, x) => sum + x.base_stat, 0);
+					if (!cancelled) {
+						statTotals = { ...statTotals, [p.id]: total };
+					}
+				} catch {
+					if (!cancelled) {
+						statTotals = { ...statTotals, [p.id]: 0 };
+					}
+				}
+			})
+		).finally(() => {
+			if (!cancelled) {
+				loadingStats = false;
+			}
+		});
+		return () => {
+			cancelled = true;
+		};
+	});
 	const hasActiveFilters = $derived(
 		debouncedSearch !== "" || selectedGen !== null || selectedTypes.length > 0
 	);
@@ -178,6 +222,7 @@ import type { IndexEntry } from '$api/index-builder';
 			<option value="id-desc">Number ↓</option>
 			<option value="name-asc">Name A–Z</option>
 			<option value="name-desc">Name Z–A</option>
+			<option value="stat-desc">Stat total ↓</option>
 		</select>
 
 		<button
@@ -242,6 +287,11 @@ import type { IndexEntry } from '$api/index-builder';
 		</div>
 	{/if}
 </div>
+
+<!-- Stat-total loading indicator -->
+{#if loadingStats}
+	<p class="text-muted mb-4 text-sm" aria-live="polite">Loading base-stat totals…</p>
+{/if}
 
 <!-- Active filter summary -->
 {#if hasActiveFilters}
