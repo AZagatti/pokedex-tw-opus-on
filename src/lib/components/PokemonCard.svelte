@@ -54,7 +54,7 @@
 			class="h-28 w-28 transition-transform duration-200 group-hover:scale-110"
 		/>
 
-		<h3 class="mt-2 text-center text-base font-bold">{titleCase(name)}</h3>
+		<p class="mt-2 text-center text-base font-bold">{titleCase(name)}</p>
 
 		<div class="mt-2 flex flex-wrap justify-center gap-1">
 			{#each types as type (type)}

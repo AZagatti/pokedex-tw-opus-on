@@ -46,7 +46,7 @@
 						</button>
 						<span class="text-muted self-start text-xs font-bold tabular-nums">{formatDexNumber(fav.id)}</span>
 						<PokemonImage src={artworkUrl(fav.id)} fallback={spriteUrl(fav.id)} alt={titleCase(fav.name)} class="h-24 w-24 transition-transform group-hover:scale-110" />
-						<h3 class="mt-2 text-center font-bold">{titleCase(fav.name)}</h3>
+						<p class="mt-2 text-center font-bold">{titleCase(fav.name)}</p>
 					</a>
 				{/each}
 			</div>
@@ -64,7 +64,7 @@
 							<Icon name="heart" filled size={18} />
 						</button>
 						<img src={berrySprite(fav.name)} alt={titleCase(fav.name)} class="h-16 w-16 object-contain [image-rendering:pixelated]" loading="lazy" />
-						<h3 class="mt-2 text-center font-bold capitalize">{titleCase(fav.name)} Berry</h3>
+						<p class="mt-2 text-center font-bold capitalize">{titleCase(fav.name)} Berry</p>
 					</a>
 				{/each}
 			</div>

@@ -4,6 +4,8 @@ import type { NumericRange } from "@sveltejs/kit";
 
 import type { PageLoad } from "./$types";
 
+export const prerender = false;
+
 interface HttpError {
   status?: number;
 }
