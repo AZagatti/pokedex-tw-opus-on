@@ -7,38 +7,49 @@
 	const { chain, currentId = 0 }: { chain: EvolutionChain; currentId?: number } =
 		$props();
 
-	interface Stage { id: number; name: string }
-
-	// Flatten the evolution tree into ordered stages (linear chains + branches).
-	function collect(link: EvoLink): Stage[][] {
-		const id = idFromUrl(link.species.url);
-		const self: Stage = { id, name: link.species.name };
-		if (link.evolves_to.length === 0) {
-			return [[self]];
-		}
-		const paths: Stage[][] = [];
-		for (const next of link.evolves_to) {
-			for (const tail of collect(next)) {
-				paths.push([self, ...tail]);
-			}
-		}
-		return paths;
+	interface Stage {
+		id: number;
+		name: string;
 	}
 
-	const paths = $derived(collect(chain.chain));
+	// Group the evolution tree into levels (columns): base, stage 2, stage 3.
+	// Branched families (e.g. Eevee) show the base once, fanning out to all
+	// evolutions in the next column instead of repeating the base per branch.
+	function toLevels(root: EvoLink): Stage[][] {
+		const levels: Stage[][] = [];
+		let current: EvoLink[] = [root];
+		while (current.length > 0) {
+			const seen = new Set<number>();
+			const row: Stage[] = [];
+			const next: EvoLink[] = [];
+			for (const link of current) {
+				const id = idFromUrl(link.species.url);
+				if (!seen.has(id)) {
+					seen.add(id);
+					row.push({ id, name: link.species.name });
+				}
+				next.push(...link.evolves_to);
+			}
+			levels.push(row);
+			current = next;
+		}
+		return levels;
+	}
+
+	const levels = $derived(toLevels(chain.chain));
 </script>
 
-<div class="flex flex-col gap-4">
-	{#each paths as path, i (i)}
-		<div class="flex flex-wrap items-center justify-center gap-2">
-			{#each path as stage, j (stage.id)}
-				{#if j > 0}
-					<span class="text-muted text-2xl" aria-hidden="true">→</span>
-				{/if}
+<div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+	{#each levels as level, i (i)}
+		{#if i > 0}
+			<span class="text-muted text-2xl" aria-hidden="true">→</span>
+		{/if}
+		<div class="flex flex-col gap-3">
+			{#each level as stage (stage.id)}
 				<a
 					href="{base}/pokemon/{stage.name}/"
 					class="surface flex flex-col items-center rounded-xl border p-2 transition-transform hover:-translate-y-1 hover:shadow-md {stage.id ===
-						currentId
+					currentId
 						? 'ring-2 ring-poke-red'
 						: ''}"
 				>
